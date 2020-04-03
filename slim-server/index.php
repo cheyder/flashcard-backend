@@ -25,14 +25,50 @@ $app->get('/cards', function (Request $request, Response $response, array $args)
 });
 
 // GET /cards/{id}
+
 $app->get('/cards/{id}', function (Request $request, Response $response, array $args) {
-    $response->getBody()->write(file_get_contents('../client/build/index.html'));
+    $dbconnect = (new MongoDB\Client("mongodb://localhost:27017/flashcards-react-jerry"));
+    $collection = $dbconnect->selectCollection('flashcards-react-jerry', 'cards'); 
+    $cursor = $collection->findOne([
+        '_id' => $args['1'],
+    ]);
+
+    $response->getBody()->write(json_encode($cursor));
     return $response;
 });
 
 // POST /cards
+//request body {"question":"Hallo","answer":"Du","tags":["js"]}
+$app->post('/cards', function ($request, $response, $args) {
+    $dbconnect = (new MongoDB\Client("mongodb://localhost:27017/flashcards-react-jerry"));
+    $collection = $dbconnect->selectCollection('flashcards-react-jerry', 'cards'); 
+    $postContent = $request->getParsedBody();
+    /*
+    $cursor = $collection->insertOne([
+        'question' => $args['question'],
+        'answer' => $args['answer'],
+        'tags' => $args['tags']
+    ]);
+    */
+    $response->getBody()->write($postContent);
+});
 
-// PATCH /cards/{id}
+
+/*
+$app->patch('/cards/{id}', function ($request, $response, $args) {
+    $dbconnect = (new MongoDB\Client("mongodb://localhost:27017/flashcards-react-jerry"));
+    $collection = $dbconnect->selectCollection('flashcards-react-jerry', 'cards'); 
+    $cursor = $collection->updateOne(
+        [
+            '_id' => $args['1'],
+        ], 
+        [
+            $args['1'],
+        ]);
+    $response->getBody()->write(json_encode($cursor));
+    return $response;
+});
+*/
 
 // DELETE /cards/all
 
