@@ -43,7 +43,8 @@ $app->post('/cards', function ($request, $response, $args) {
     $dbconnect = (new MongoDB\Client("mongodb://localhost:27017/flashcards-react-jerry"));
     $collection = $dbconnect->selectCollection('flashcards-react-jerry', 'cards'); 
     $postContent = $request->getParsedBody();
-    /*
+    /* NICHT AUSPROBIEREN, auf jeden FAll nur in abgwandelter Form
+    //hat beim letzten MAl alles zerschossen
     $cursor = $collection->insertOne([
         'question' => $args['question'],
         'answer' => $args['answer'],
